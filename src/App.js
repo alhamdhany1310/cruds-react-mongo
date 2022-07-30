@@ -14,10 +14,10 @@ const App = () => {
 
   const getDataApi = async () => {
     if (search) {
-      const respons = await axios.get(`http://localhost:3000/api/v2/product?search=${search}`);
+      const respons = await axios.get(`https://task-express-mongo.herokuapp.com/api/v2/product?search=${search}`);
       setProduct(respons.data);
     } else {
-      const respons = await axios.get(`http://localhost:3000/api/v2/product`);
+      const respons = await axios.get(`https://task-express-mongo.herokuapp.com/api/v2/product`);
       setProduct(respons.data);
     }
   };
@@ -25,7 +25,7 @@ const App = () => {
   const postToApi = (adddata) => {
     console.log(adddata);
     axios
-      .post(`http://localhost:3000/api/v2/product`, adddata)
+      .post(`https://task-express-mongo.herokuapp.com/api/v2/product`, adddata)
       .then((res) => {
         setDataList(adddata);
         console.log(res);
@@ -34,7 +34,7 @@ const App = () => {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:3000/api/v2/product/${id._id}`).then((res) => {
+    axios.delete(`https://task-express-mongo.herokuapp.com/api/v2/product/${id._id}`).then((res) => {
       getDataApi();
     });
   };

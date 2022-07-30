@@ -1,5 +1,7 @@
 import Input from '../../components/Input';
 import './index.scss';
+import '../Home/index.scss';
+import '../Detail/index.scss';
 import { Link } from 'react-router-dom';
 import { numberWithCommas } from '../../utils/utils';
 import { useState } from 'react';

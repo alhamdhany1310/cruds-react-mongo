@@ -160,7 +160,7 @@ header h3 {
   margin: 0 15px;
 }
 
-button {
+.buton {
   width: 170px;
   height: 35px;
   border: none;
@@ -168,13 +168,13 @@ button {
   font-family: 'Literata', serif;
 }
 
-button:first-of-type {
+.buton:first-of-type {
   background: #4fc3f7;
   border-radius: 4px;
   margin-right: 10px;
 }
 
-button:nth-of-type(2) {
+.buton:nth-of-type(2) {
   background: white;
   border: 2px solid #4fc3f7;
   border-radius: 4px;

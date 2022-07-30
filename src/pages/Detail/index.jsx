@@ -8,7 +8,7 @@ const Detail = () => {
   const [detail, setDetail] = useState([]);
   let id = params.id;
   const getByid = () => {
-    axios.get(`http://localhost:3000/api/v2/product/${id}`).then((res) => {
+    axios.get(`https://task-express-mongo.herokuapp.com/api/v2/product/${id}`).then((res) => {
       setDetail(res.data);
     });
   };
@@ -38,8 +38,8 @@ const Detail = () => {
               <span>Rp. {detail.price}</span>
             </p>
             <p>Stock Tersedia {detail.stock}</p>
-            <button>Buy Now</button>
-            <button>Add To Bag</button>
+            <button className="buton">Buy Now</button>
+            <button className="buton">Add To Bag</button>
           </div>
         </div>
       </section>
