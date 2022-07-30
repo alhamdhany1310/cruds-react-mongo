@@ -1,33 +1,50 @@
-import { Link } from "react-router-dom";
-import './index.scss';
+import './index.css';
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Detail = () => {
-  return (
-    <div className="main">
-      <Link to="/" className="btn btn-primary">Kembali</Link>
+  const params = useParams();
+  const [detail, setDetail] = useState([]);
+  let id = params.id;
+  const getByid = () => {
+    axios.get(`http://localhost:3000/api/v2/product/${id}`).then((res) => {
+      setDetail(res.data);
+    });
+  };
+  useEffect(() => {
+    getByid();
+  }, [detail]);
 
-      <table className="table">
-        <tbody>
-          <tr>
-            <td>ID</td>
-            <td>: asdasdasdasd</td>
-          </tr>
-          <tr>
-            <td>Name</td>
-            <td>: Laptop</td>
-          </tr>
-          <tr>
-            <td>Price</td>
-            <td>: Rp. 20.000.000</td>
-          </tr>
-          <tr>
-            <td>Stock</td>
-            <td>: 10</td>
-          </tr>
-        </tbody>
-      </table>
+  return (
+    <div>
+      <section>
+        <header></header>
+        <div data-product-detail>
+          <div class="img-card">
+            <div class="img">
+              <i class="far fa-heart"></i>
+              <img src={detail.image_url} />
+            </div>
+          </div>
+          <div class="product-details">
+            <h2>{detail.name}</h2>
+            <p>Men Black Silk Bow Tie</p>
+            <p>
+              <i class="fas fa-star"></i>4.5 | <span>2.5k reviews</span>
+            </p>
+            <p>Harga</p>
+            <p>
+              <span>Rp. {detail.price}</span>
+            </p>
+            <p>Stock Tersedia {detail.stock}</p>
+            <button>Buy Now</button>
+            <button>Add To Bag</button>
+          </div>
+        </div>
+      </section>
     </div>
-  )
-}
+  );
+};
 
 export default Detail;
