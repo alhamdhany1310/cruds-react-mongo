@@ -1,12 +1,22 @@
+li {
+  display: inline-block;
+  margin-left: 10px;
+  width: 40%;
+  span {
+    font-size: 10px;
+    color: red;
+  }
+}
 .form-control {
+  display: flex;
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 3px;
   box-sizing: border-box;
   margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
+  margin-bottom: 5px;
+  resize: horizontal;
   font-size: 14px;
 
   &:focus {
@@ -14,14 +24,14 @@
   }
 }
 
-input[type=checkbox] {
+input[type='checkbox'] {
   margin-right: 5px;
   margin-top: 6px;
   margin-bottom: 16px;
 }
 
 .card {
-  width: 50%;
+  width: 96%;
   box-shadow: 1px 1px 5px #ddd;
   border-radius: 5px;
   padding: 20px;

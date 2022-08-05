@@ -6,6 +6,7 @@ import Dashbord from './pages/Dashbord';
 import Detail from './pages/Detail';
 import Edit from './pages/Edit';
 import Tambah from './pages/Tambah';
+import swal from 'sweetalert';
 
 const App = () => {
   const [product, setProduct] = useState([]);
@@ -34,8 +35,22 @@ const App = () => {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`https://task-express-mongo.herokuapp.com/api/v2/product/${id._id}`).then((res) => {
-      getDataApi();
+    swal({
+      title: 'Yakin Mau di Menghapus?',
+      text: `Product dengan nama ${id.name} `,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then(() => {
+      axios.delete(`https://task-express-mongo.herokuapp.com/api/v2/product/${id._id}`).then((res) => {
+        swal({
+          title: 'Berhasil!',
+          text: `${id.name} telah di Hapus!`,
+          icon: 'success',
+          button: 'OK',
+        });
+        getDataApi();
+      });
     });
   };
 
@@ -51,8 +66,8 @@ const App = () => {
       <Routes>
         <Route path="/" exact={true} element={<Dashbord product={product} change={handleSearch} />} />
         <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/edit" element={<Edit />} />
-        <Route path="/tambah" element={<Tambah product={product} change={handleSearch} diDelete={handleDelete} adddata={postToApi} />} />
+        <Route path="/edit/:id" element={<Edit />} />
+        <Route path="/tambah/" element={<Tambah product={product} change={handleSearch} diDelete={handleDelete} adddata={postToApi} />} />
       </Routes>
     </div>
   );

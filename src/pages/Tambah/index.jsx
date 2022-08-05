@@ -2,66 +2,128 @@ import Input from '../../components/Input';
 import './index.scss';
 import '../Home/index.scss';
 import '../Detail/index.scss';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { numberWithCommas } from '../../utils/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import swal from 'sweetalert';
 
 const Tambah = (props) => {
-  const [proControl, setProControl] = useState({
+  let navigate = useNavigate();
+  const [formValues, setFormValues] = useState({
     name: '',
     price: '',
     stock: '',
-    status: false,
-    image: '',
   });
-  const [kosong, setKosong] = useState('');
+  const [error, setError] = useState({});
+  const [submit, setSubmit] = useState(false);
+  const [addImage, setAddImage] = useState(null);
+  const [status, setStatus] = useState(false);
 
   const handleChange = (e) => {
-    let newProControl = { ...proControl };
-    newProControl[e.target.name] = e.target.value;
-    setProControl(newProControl);
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+    console.log(formValues);
   };
 
-  const handleClick = (e) => {
-    let copyAdd = { ...proControl };
-    copyAdd[e.target.name] = e.target.checked;
-    setProControl(copyAdd);
+  const handleFile = (e) => {
+    const image = e.target.files[0];
+    setAddImage(image);
+    // setFormValues(image);
+  };
+
+  const handleChecked = (e) => {
+    const statu = e.target.checked;
+    setStatus(statu);
+    // setFormValues(statu);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (proControl.name.length === 0) {
-      setKosong("Name Can't be Empty!");
-    } else if (proControl.price.length === 0) {
-      setKosong("Price Can't be Empty!");
-    } else if (proControl.stock.length === 0) {
-      setKosong("Stock Can't be Empty!");
-    } else {
-      console.log(proControl);
-      props.adddata({ ...proControl, image: '' });
-      setProControl({
-        name: '',
-        price: '',
-        stock: '',
-        status: false,
-        image: '',
+    setError(validate(formValues));
+
+    const formData = new FormData();
+    formData.append('name', formValues.name);
+    formData.append('price', formValues.price);
+    formData.append('stock', formValues.stock);
+    formData.append('image', addImage);
+    formData.append('status', status);
+    const config = {
+      Headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
+    axios
+      .post('https://task-express-mongo.herokuapp.com/api/v2/product', formData, config)
+      .then(() => {
+        swal({
+          title: 'Berhasil!',
+          text: `${formValues.name} Berhasil Di Tambah`,
+          icon: 'success',
+          button: 'OK',
+        });
+      })
+      .catch((err) => {
+        console.log('ini error disini', err);
       });
-      setKosong('');
-    }
+    setFormValues({
+      name: '',
+      price: '',
+      stock: '',
+    });
+    setAddImage(null);
+    setStatus(false);
+    setSubmit(true);
   };
 
+  useEffect(() => {
+    // console.log(error);
+    if (Object.keys(error).length === 0 && submit) {
+      console.log(formValues);
+    }
+  });
+
+  const validate = (values) => {
+    const errors = {};
+    if (!values.name) {
+      errors.name = '* Nama Harus di Isi';
+    }
+    if (!values.price) {
+      errors.price = '* Harga Harus di isi';
+    }
+    if (!values.stock) {
+      errors.stock = '* Stock Harus di Isi';
+    }
+    return errors;
+  };
   return (
     <div className="main">
-      <div className="car">
+      <div className="card">
         <h2>Tambah Produk</h2>
-        {kosong ? <p className="warning">*{kosong}</p> : ''}
+
         <br />
         <form>
-          <Input name="name" type="text" placeholder="Nama Produk..." label="Nama" value={proControl.name} onChange={handleChange} />
-          <Input name="price" type="number" placeholder="Harga Produk..." label="Harga" value={proControl.price} onChange={handleChange} />
-          <Input name="stock" type="number" placeholder="Stock Produk..." label="Stock" value={proControl.stock} onChange={handleChange} />
-          <Input name="image" type="file" placeholder="Gambar Product" label="Image" value={proControl.image} onChange={handleChange} />
-          <Input name="status" type="checkbox" label="Active" onClick={handleClick} value={proControl.status} />
+          <ul>
+            <li>
+              <Input name="name" type="text" value={formValues.name} onChange={handleChange} placeholder="Nama Produk..." label="nama" />
+              <span className="req">{error.name}</span>
+            </li>
+            <li>
+              <Input name="price" type="number" value={formValues.price} onChange={handleChange} placeholder="Harga Produk..." label="Harga" />
+              <span className="req">{error.price}</span>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <Input name="stock" type="number" value={formValues.stock} onChange={handleChange} placeholder="Stock Produk..." label="Stock" />
+              <span className="req">{error.stock}</span>
+            </li>
+            <li>
+              <Input name="image" type="file" placeholder="Gambar Product" onChange={handleFile} label="Image" />
+              <span className="req">{error.stock}</span>
+            </li>
+          </ul>
+          <Input name="status" type="checkbox" onChange={handleChecked} label="Active" />
           <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
             Simpan
           </button>
@@ -91,14 +153,17 @@ const Tambah = (props) => {
               <td>{product.name}</td>
               <td className="text-center">Rp. {numberWithCommas(product.price)}</td>
               <td className="text-center">{product.stock}</td>
-              <td className="text-center">image</td>
               <td className="text-center">
-                <Link to="/detail" className="btn btn-sm btn-info">
+                <img src={product.image_url} alt="ini gambar yaaaaa" />
+              </td>
+              <td className="text-center">
+                {/* <Link to="/detail" className="btn btn-sm btn-info">
                   Detail
-                </Link>
-                <Link to="/edit" className="btn btn-sm btn-warning">
+                </Link> */}
+
+                <button className="btn btn-sm btn-warning" onClick={() => navigate(`/edit/${product._id}`)}>
                   Edit
-                </Link>
+                </button>
                 <button className="btn btn-sm btn-danger" onClick={() => props.diDelete(product)}>
                   Delete
                 </button>
