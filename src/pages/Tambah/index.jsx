@@ -5,8 +5,8 @@ import '../Detail/index.scss';
 import { useNavigate } from 'react-router-dom';
 import { numberWithCommas } from '../../utils/utils';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import swal from 'sweetalert';
+// import axios from 'axios';
+// import swal from 'sweetalert';
 
 const Tambah = (props) => {
   let navigate = useNavigate();

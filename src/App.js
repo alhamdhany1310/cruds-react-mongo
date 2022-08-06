@@ -47,16 +47,19 @@ const App = () => {
       icon: 'warning',
       buttons: true,
       dangerMode: true,
-    }).then(() => {
-      axios.delete(`https://task-express-mongo.herokuapp.com/api/v2/product/${id._id}`).then((res) => {
+    }).then((willDelete) => {
+      if (willDelete) {
         swal({
           title: 'Berhasil!',
           text: `${id.name} telah di Hapus!`,
           icon: 'success',
           button: 'OK',
+        }).then(() => {
+          axios.delete(`https://task-express-mongo.herokuapp.com/api/v2/product/${id._id}`).then((res) => {
+            getDataApi();
+          });
         });
-        getDataApi();
-      });
+      }
     });
   };
 
