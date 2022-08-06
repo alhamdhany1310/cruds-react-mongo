@@ -53,19 +53,20 @@ const Tambah = (props) => {
         'content-type': 'multipart/form-data',
       },
     };
-    axios
-      .post('https://task-express-mongo.herokuapp.com/api/v2/product', formData, config)
-      .then(() => {
-        swal({
-          title: 'Berhasil!',
-          text: `${formValues.name} Berhasil Di Tambah`,
-          icon: 'success',
-          button: 'OK',
-        });
-      })
-      .catch((err) => {
-        console.log('ini error disini', err);
-      });
+    props.adddata(formData, config, formValues.name);
+    // axios
+    //   .post('https://task-express-mongo.herokuapp.com/api/v2/product', formData, config)
+    //   .then(() => {
+    //     swal({
+    //       title: 'Berhasil!',
+    //       text: `${formValues.name} Berhasil Di Tambah`,
+    //       icon: 'success',
+    //       button: 'OK',
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log('ini error disini', err);
+    //   });
     setFormValues({
       name: '',
       price: '',

@@ -23,11 +23,17 @@ const App = () => {
     }
   };
 
-  const postToApi = (adddata) => {
+  const postToApi = (adddata, config, productName) => {
     console.log(adddata);
     axios
-      .post(`https://task-express-mongo.herokuapp.com/api/v2/product`, adddata)
+      .post(`https://task-express-mongo.herokuapp.com/api/v2/product`, adddata, config, productName)
       .then((res) => {
+        swal({
+          title: 'Berhasil!',
+          text: `${productName} Berhasil Di Tambah`,
+          icon: 'success',
+          button: 'OK',
+        });
         setDataList(adddata);
         console.log(res);
       })
