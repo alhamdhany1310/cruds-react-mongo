@@ -22,7 +22,7 @@ const Edit = () => {
   }, []);
 
   const getDataById = async () => {
-    const respons = await axios.get(`http://localhost:3000/api/v2/product/${id}`);
+    const respons = await axios.get(`https://task-express-mongo.herokuapp.com/api/v2/product/${id}`);
     console.log(respons.data);
     // setAddName(respons.data.name);
     // setAddPrice(respons.data.price);
